@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMS.App", "LibMS.App\LibMS.App.csproj", "{423088C0-FC8E-4264-9D6D-951D8CFAADD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMS.App", "LibMS.App\LibMS.App.csproj", "{423088C0-FC8E-4264-9D6D-951D8CFAADD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMS.Test", "LibMS.Test\LibMS.Test.csproj", "{1C8E5EF9-5890-467D-BD7F-C2216B8ED041}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMS.Test", "LibMS.Test\LibMS.Test.csproj", "{1C8E5EF9-5890-467D-BD7F-C2216B8ED041}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{423088C0-FC8E-4264-9D6D-951D8CFAADD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,5 +41,11 @@ Global
 		{1C8E5EF9-5890-467D-BD7F-C2216B8ED041}.Release|x64.Build.0 = Release|Any CPU
 		{1C8E5EF9-5890-467D-BD7F-C2216B8ED041}.Release|x86.ActiveCfg = Release|Any CPU
 		{1C8E5EF9-5890-467D-BD7F-C2216B8ED041}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0D97887-F3BC-48B7-9CC4-3B90D4A838F1}
 	EndGlobalSection
 EndGlobal
