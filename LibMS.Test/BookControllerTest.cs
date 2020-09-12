@@ -4,6 +4,8 @@ using System.Text;
 using Xunit;
 using Moq;
 using System.Threading.Tasks;
+using LibMS.Services.IServices;
+using LibMS.Api.Controllers;
 
 namespace LibMS.Test
 {
