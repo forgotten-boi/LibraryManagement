@@ -4,4 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LibMS.DataAccess\LibMS.DataAccess.csproj" />
+    <ProjectReference Include="..\LibMS.Entity\LibMS.Entity.csproj" />
+    <ProjectReference Include="..\LibMS.Repository\LibMS.Repository.csproj" />
+    <ProjectReference Include="..\LibMS.Services\LibMS.Services.csproj" />
+  </ItemGroup>
+
 </Project>

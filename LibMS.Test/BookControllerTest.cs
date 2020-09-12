@@ -10,11 +10,13 @@ namespace LibMS.Test
     public class BookControllerTest
     {
         [Fact]
-        public async Task GetAll_NoBooks_NoReturns()
+        public async Task Get_BooksWithBookCountGreaterThanZero_ReturnsAvailableBooks()
         {
             var bookServiceMock = new Mock<IBookService>();
-            var bookController = new BookController(bookService);
-            var response = bookController.Get();
+            var mockedBookService = bookServiceMock.Object;
+
+            var bookController = new BookController(mockedBookService);
+            var response = await bookController.Get();
             bookServiceMock.Verify(x => x.GetCurrentBookAsync());
         }
     }
