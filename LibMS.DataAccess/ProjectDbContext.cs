@@ -10,7 +10,7 @@ namespace LibMS.DataAccess
 {
     public class ProjectDbContext : DbContext
     {
-        public ProjectDbContext(DbContextOptions options) : base(options)
+        public ProjectDbContext(DbContextOptions<ProjectDbContext> options) : base(options)
         {
 
         }
@@ -32,7 +32,7 @@ namespace LibMS.DataAccess
 
             builder.Entity<AssignBookInfo>()
                  .HasOne(e => e.BookInfo)
-                 .WithMany(c => c.AssignBookInfoes).HasForeignKey(e=>e.BookID);
+                 .WithMany(c => c.AssignBookInfoes).HasForeignKey(e => e.BookID);
 
             builder.Entity<AssignBookInfo>()
                  .HasOne(e => e.User)
