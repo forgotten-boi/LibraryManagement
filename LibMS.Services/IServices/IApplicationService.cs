@@ -11,7 +11,6 @@ namespace LibMS.Services.IServices
 {
     public interface IApplicationService<T, T2> where T : BaseEntity<T2>
     {
-        Task<IEnumerable<T>> GetAllAsync();
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T2 id);
@@ -19,8 +18,5 @@ namespace LibMS.Services.IServices
         Task<T> GetByIDAsync(T2 id);
         Task<IEnumerable<T>> GetFilteredAsync(Expression<Func<T, bool>> where);
         Task<T> FindByAsync(Expression<Func<T, bool>> where);
-        
     }
-
-
 }

@@ -5,7 +5,7 @@ namespace LibMS.Repository.Repositories
 {
     public class BookRepository : Repository<BookInfo, int>, IBookRepository
     {
-        public BookRepository(ProjectDbContext context, UserContext userContext) : base(context, userContext)
+        public BookRepository(ProjectDbContext context) : base(context)
         {
 
         }

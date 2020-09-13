@@ -21,36 +21,17 @@ namespace LibMS.Repository.Repositories
     {
         private ProjectDbContext _dataContext;
         private DbSet<T> _dbset;
-        public UserContext _userContext { get; set; }
-        public Repository(ProjectDbContext DataContext, UserContext userContext)
+        public Repository(ProjectDbContext DataContext)
         {
             _dataContext = DataContext;
             _dbset = DataContext.Set<T>();
-            _userContext = userContext;
+
         }
         public virtual IQueryable<T> GetAll()
         {
             return _dbset.AsQueryable<T>();
         }
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
-        {
-            if (_userContext.GetLoggedInUser().Roles.Any(p => !p.Value.Equals("Employee")))
-                return await _dbset.ToListAsync();
-            else
-            {
-                Func<T, bool> filterExp = (T obj) =>
-                {
-                    dynamic s = obj;
-
-                    return s.CreatedBy == _userContext.GetLoggedInUser().UserName || String.IsNullOrEmpty(s.CreatedBy);
-                };
-
-                //var getall = await _dbset.Where("CreatedBy=\"" + _userContext.GetLoggedInUser().UserName + "\" or CreatedBy=null").ToListAsync();
-                var filterData = await _dbset.Where(x => filterExp(x)).ToListAsync();
-                return filterData;
-
-            }
-        }
+      
 
         public virtual async Task<T> GetByIDAsync(T2 id)
         {
@@ -62,7 +43,6 @@ namespace LibMS.Repository.Repositories
             {
                 dynamic model = entity;
                 model.CreatedDate = DateTime.Now;
-                model.CreatedBy = _userContext.GetLoggedInUser().UserName;
                 await _dbset.AddAsync(model).ConfigureAwait(false);
                 await SaveAsync();
             }
@@ -110,8 +90,7 @@ namespace LibMS.Repository.Repositories
         {
             dynamic model = entity;
             model.CreatedDate = DateTime.Now;
-            model.CreatedBy = _userContext.GetLoggedInUser().ToString();
-
+            
             _dbset.Add(model);
             Save();
             
@@ -127,7 +106,6 @@ namespace LibMS.Repository.Repositories
         {
             dynamic model = entity;
             model.ModifiedDate = DateTime.Now;
-            model.ModifiedBy = _userContext.GetLoggedInUser().UserName;
             _dbset.Attach(model);
             _dataContext.Entry(model).State = EntityState.Modified;
             Save();
@@ -172,23 +150,20 @@ namespace LibMS.Repository.Repositories
             await SaveAsync();
 
         }
-        public virtual IEnumerable<T> GetFiltered(Expression<Func<T, bool>> where)
-        {
-            return _dbset.Where(where).ToList();
-        }
+        
         public virtual async Task<IEnumerable<T>> GetFilteredAsync(Expression<Func<T, bool>> where)
         {
-            return await Task.FromResult<IEnumerable<T>>(_dbset.Where(where).ToList());
+            return await _dbset.Where(where).ToListAsync();
+        }
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _dbset.ToListAsync();
         }
         public virtual async Task<T> FindByIdAsync(Expression<Func<T, bool>> where)
         {
             return await Task.FromResult<T>(_dbset.Where(where).SingleOrDefault());
         }
 
-        public virtual IQueryable<T> GetAllQueryable()
-        {
-            return _dbset.AsQueryable<T>();
-        }
 
         public void Delete(T2 id)
         {
@@ -197,13 +172,6 @@ namespace LibMS.Repository.Repositories
             Save();
         }
 
-        public virtual IQueryable<T> Table
-        {
-            get
-            {
-                return _dbset;
-            }
-        }
         public virtual IQueryable<T> TableAsNoTracking
         {
             get
@@ -211,82 +179,12 @@ namespace LibMS.Repository.Repositories
                 return _dbset.AsNoTracking();
             }
         }
-
-        // public List<T> 
-        public async Task<IEnumerable<T>> ExecWithStoreProcedureAsync(string ProcedureName)
+        public virtual IQueryable<T> Table
         {
-            var result = await _dbset.FromSql<T>(ProcedureName).ToListAsync();
-            return result;
-
-        }
-
-        public async Task<IEnumerable<T>> ExecWithStoreProcedureAsync(string ProcedureName, params object[] parameters)
-        {
-            return await _dbset.FromSql<T>(ProcedureName, parameters).ToListAsync();
-        }
-
-        public async Task<int> ExecWithStoreProcedureAsync(string query, SqlParameter[] parameter)
-        {
-            try
+            get
             {
-                _dataContext.Database.OpenConnection();
-                DbCommand cmd = _dataContext.Database.GetDbConnection().CreateCommand();
-                cmd.CommandText = query;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddRange(parameter);
-                var data = new List<int>();
-                var result = await cmd.ExecuteNonQueryAsync();
-                return result;
+                return _dbset.AsTracking();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public DataSet ExecWithStoreProcedureMultipleData(string query, SqlParameter[] parameter)
-        {
-            var ConnectionObj = _dataContext.Database.GetDbConnection().ConnectionString;
-            SqlConnection con = new SqlConnection(ConnectionObj);
-            SqlCommand cmd = new SqlCommand();
-            SqlDataAdapter da = new SqlDataAdapter();
-            DataSet ds = new DataSet();
-            cmd = new SqlCommand(query, con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddRange(parameter);
-            da = new SqlDataAdapter(cmd);
-            da.Fill(ds);
-            con.Close();
-            return ds;
-        }
-
-        public List<T1> CreateListFromTable<T1>(DataTable tbl) where T1 : new()
-        {
-            // define return list
-            List<T1> lst = new List<T1>();
-
-            // go through each row
-            foreach (DataRow r in tbl.Rows)
-            {
-                // add to the list
-                lst.Add(CreateItemFromRow<T1>(r));
-            }
-
-            // return the list
-            return lst;
-        }
-
-        // function that creates an object from the given data row
-        public static T1 CreateItemFromRow<T1>(DataRow row) where T1 : new()
-        {
-            // create a new object
-            T1 item = new T1();
-
-            // set the item
-            SetItemFromRow(item, row);
-
-            // return 
-            return item;
         }
 
         public static void SetItemFromRow<T1>(T1 item, DataRow row) where T1 : new()
@@ -314,50 +212,6 @@ namespace LibMS.Repository.Repositories
         }
      
     }
-
-
-    
-
-        public class UserContext
-        {
-
-            public string UserName { get; set; }
-            public string UserId { get; set; }
-
-            public string Roles { get; set; }
-
-            private readonly IHttpContextAccessor _context;
-            public UserContext(IHttpContextAccessor context)
-            {
-                this._context = context;
-            }
-
-            public UserInfo GetLoggedInUser()
-            {
-                var claimsIdentity = _context.HttpContext.User;
-                var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-                UserName = claimsIdentity.Identity.Name;
-                UserId = claim.Value;
-                Roles = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.Role).ToString();
-                var userContext = new UserInfo()
-                {
-                    UserName = claimsIdentity.Identity.Name,
-                    UserId = claim.Value,
-                    Roles = claimsIdentity.FindAll(System.Security.Claims.ClaimTypes.Role)
-                };
-                return userContext;
-
-
-            }
-        }
-        public class UserInfo
-        {
-            public string UserName { get; set; }
-            public string UserId { get; set; }
-
-            public IEnumerable<System.Security.Claims.Claim> Roles { get; set; }
-        }
-
 
     
 }

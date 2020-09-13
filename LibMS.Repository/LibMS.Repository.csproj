@@ -10,6 +10,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\LibMS.DataAccess\LibMS.DataAccess.csproj" />
 		<ProjectReference Include="..\LibMS.Infrastructure\LibMS.Infrastructure.csproj" />
 	</ItemGroup>

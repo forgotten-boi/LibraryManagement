@@ -4,5 +4,6 @@ namespace LibMS.Services.IServices
 {
     public interface IBookCountService : IApplicationService<BookCountInfo, int>
     {
+
     }
 }
