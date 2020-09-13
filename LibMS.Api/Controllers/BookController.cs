@@ -6,6 +6,8 @@ using LibMS.Entity.Entities;
 using LibMS.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace LibMS.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -13,17 +15,28 @@ namespace LibMS.Api.Controllers
     public class BookController : Controller
     {
         private IBookService _bookService;
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService) 
         {
             _bookService = bookService;
 
         }
 
         [HttpGet]
-        public async Task<IEnumerable<BookInfo>> Get()
+        public async Task<IActionResult> Get()
         {
-            var bookList = await _bookService.GetCurrentBookAsync();
-            return bookList;
+            try
+            {
+                var bookList=  await _bookService.GetCurrentBookAsync();
+                
+                return new OkObjectResult(bookList);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
+
+    
     }
 }
