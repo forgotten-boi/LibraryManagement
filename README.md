@@ -20,7 +20,8 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 # Backend
 The api is created on .Net Core 3.1(https://dot.net). The Api project is named `LibMs.Api`. This project references LibMS.Service, LibMS.Entity, LibMS.Repository, LibMS.DataAccess for their consecutive layers. 
 The dependency injection for different Services, and Repositories are maintained in Startup.cs. 
-*Entity Framework Core* is used as ORM.
+*Entity Framework Core* is used as ORM. 
+*Test Driven Development* and *SOLID* Design pattern is followed.
 
 # Unit Test
 Xunit is used as testing framework where as Moq is for mocking data. `LibMSTest` is test project.

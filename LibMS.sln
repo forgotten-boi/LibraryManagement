@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMS.Api", "LibMS.Api\LibM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMSTest", "LibMSTest\LibMSTest.csproj", "{9D7FF01F-5C5A-4AD1-B641-980492FA64FE}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LibMS.Db", "LibMS.Db\LibMS.Db.sqlproj", "{935A2734-7398-4157-817D-E133CBAB1AB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,12 @@ Global
 		{9D7FF01F-5C5A-4AD1-B641-980492FA64FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D7FF01F-5C5A-4AD1-B641-980492FA64FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D7FF01F-5C5A-4AD1-B641-980492FA64FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935A2734-7398-4157-817D-E133CBAB1AB3}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
