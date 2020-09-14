@@ -137,13 +137,12 @@ namespace LibMSTest
                      .Setup(x => x.ValidateBookAssignAsync(currentBook, assignBook.UserID))
                      .ReturnsAsync(SampleAssignSuccessMessage());
 
-            
-
-             
 
                 var service = mock.Create<AssignBookController>();
 
                 var actual =await service.PostAsync(assignBook);
+                mock.Mock<IAssignBookService>()
+                    .Verify(x => x.AddAsync(assignBook), Times.Exactly(1));
                 var expected = new ResponseViewModel
                 {
                     IsSuccess = true,
@@ -171,9 +170,14 @@ namespace LibMSTest
                                             && p.UserID == assignBook.UserID && p.IsReturned == false))
                      .ReturnsAsync(assignBook);
 
-                var service = mock.Create<AssignBookController>();
+                var controller = mock.Create<AssignBookController>();
 
-                var actual =await service.PutAsync(assignBook.ID, assignBook);
+
+                var actual =await controller.PutAsync(assignBook.ID, assignBook);
+                mock.Mock<IAssignBookService>()
+                    .Verify(x => x.UpdateAsync(assignBook), Times.Exactly(1));
+                mock.Mock<IBookCountService>()
+                    .Verify(x => x.UpdateAsync(currentBook), Times.Exactly(1));
                 var expected = new ResponseViewModel
                 {
                     IsSuccess = true,
@@ -182,7 +186,58 @@ namespace LibMSTest
                 };
 
                 Assert.Equal(actual.IsSuccess, expected.IsSuccess);
-                Assert.Equal(Convert.ToInt16(actual.Data), Convert.ToInt16(expected.Data));
+                
+            }
+        }
+        [Fact]
+        public async Task IfAssigned_AssignedUser_ReturnTrue()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var currentBook = SampleBookCount();
+                var assignBook = SameBookAssign();
+                assignBook.IsReturned = false;
+
+                mock.Mock<IAssignBookService>()
+                     .Setup(x => x.GetFilteredAsync(p => p.BookID == assignBook.BookID
+                                                      && p.UserID == assignBook.UserID
+                                                      && p.IsReturned != true))
+                     .ReturnsAsync(new List<AssignBookInfo> { assignBook });
+
+                var controller = mock.Create<AssignBookController>();
+
+
+                var actual =await controller.IfAssigned(assignBook);
+              
+                var expected = true;
+
+                Assert.Equal(actual, expected);
+               
+            }
+        }
+        [Fact]
+        public async Task IfAssigned_NonAssignedUser_ReturnFalse()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var currentBook = SampleBookCount();
+                var assignBook = SameBookAssign();
+                assignBook.IsReturned = false;
+
+                mock.Mock<IAssignBookService>()
+                     .Setup(x => x.GetFilteredAsync(p => p.BookID == assignBook.BookID
+                                                      && p.UserID == assignBook.UserID
+                                                      && p.IsReturned != true))
+                     .ReturnsAsync(new List<AssignBookInfo>());
+
+                var controller = mock.Create<AssignBookController>();
+
+
+                var actual = await controller.IfAssigned(assignBook);
+
+                var expected = false;
+
+                Assert.Equal(actual, expected);
 
             }
         }

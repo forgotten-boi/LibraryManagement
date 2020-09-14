@@ -1,58 +1,40 @@
-﻿using Microsoft.AspNetCore.Http;
-using LibMS.Services.Interface;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
+
+using LibMS.Api.Helpers;
+using LibMS.Api.Models;
 using LibMS.Entity.Entities;
 using LibMS.Entity.ViewModel;
-using System.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using LibMS.Repository.Repositories;
-using System.Threading.Tasks;
 
-namespace LibMS.Services.Services
+namespace LibMS.Api.Services
 {
-    public class UserService : ApplicationService<User, int>, IUserService
-    {
-        public UserService(IUserRepository UserRepository) : base(UserRepository)
-        {
-
-        }
-
-        public async Task<IEnumerable<User>> GetNormalUserAsync()
-        {
-            var normalUser = await Repository
-                                    .GetFilteredAsync(p => string.IsNullOrEmpty(p.Password));
-            return normalUser;
-        }
-    }
+    //public interface IUserService
     //{
-    //    private readonly IHttpContextAccessor _context;
-    //    private readonly AppSettings _appSettings;
-    //    public UserService(IHttpContextAccessor context, IOptions<AppSettings> appSettings)
-    //    {
-    //        this._context = context;
-    //        _appSettings = appSettings.Value;
+    //    AuthenticateResponse Authenticate(AuthenticateRequest model);
+    //    IEnumerable<User> GetAll();
+    //    User GetById(int id);
+    //}
 
-    //    }
-
-    //    public string GetLoggedInUser()
-    //    {
-    //        var claimsIdentity = _context.HttpContext.User;
-    //        var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-    //        return claim.Value.ToString();
-       
-
-    //    }
-
-    //    //Remove Later, currently for testing
+    //public class UserService : IUserService
+    //{
+    //    // users hardcoded for simplicity, store in a db with hashed passwords in production applications
     //    private List<User> _users = new List<User>
     //    {
     //        new User { ID = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
     //    };
+
+    //    private readonly AppSettings _appSettings;
+
+    //    public UserService(IOptions<AppSettings> appSettings)
+    //    {
+    //        _appSettings = appSettings.Value;
+    //    }
 
     //    public AuthenticateResponse Authenticate(AuthenticateRequest model)
     //    {
@@ -93,6 +75,5 @@ namespace LibMS.Services.Services
     //        var token = tokenHandler.CreateToken(tokenDescriptor);
     //        return tokenHandler.WriteToken(token);
     //    }
-
     //}
 }

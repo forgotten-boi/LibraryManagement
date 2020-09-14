@@ -20,7 +20,7 @@ namespace LibMSTest
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IUserRepository>()
-                    .Setup(x => x.GetFilteredAsync(p => !string.IsNullOrEmpty(p.Password)))
+                    .Setup(x => x.GetFilteredAsync(p => string.IsNullOrEmpty(p.Password)))
                     .ReturnsAsync(GetSampleUsers());
 
                 var service = mock.Create<UserService>();

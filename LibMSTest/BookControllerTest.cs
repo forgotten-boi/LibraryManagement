@@ -31,6 +31,25 @@ namespace LibMSTest
         }
 
         [Fact]
+        public async Task Get_GivenId_ReturnsSingleBook()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sampleBook = GetSampleBooks().First();
+                mock.Mock<IBookRepository>()
+                    .Setup(x => x.FindByIdAsync(p => p.ID == sampleBook.ID))
+                    .ReturnsAsync(sampleBook);
+
+                var service = mock.Create<BookService>();
+
+                var expected = sampleBook;
+                var actual = await service.FindByAsync(p => p.ID == sampleBook.ID);
+                Assert.True(actual != null);
+                Assert.Equal(actual.ID, expected.ID);
+            }
+        }
+
+        [Fact]
         public async Task Get_BookWithCountZero_ReturnsNoBook()
         {
             using (var mock = AutoMock.GetLoose())

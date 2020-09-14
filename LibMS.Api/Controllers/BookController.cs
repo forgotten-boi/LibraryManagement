@@ -36,7 +36,22 @@ namespace LibMS.Api.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        [Route("{id}/book")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var bookList = await _bookService.FindByAsync(p => p.ID == id);
 
-    
+                return new OkObjectResult(bookList);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }

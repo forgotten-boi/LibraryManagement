@@ -11,7 +11,8 @@ using LibMS.Entity.Entities;
 namespace LibMS.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+
     public class UsersController : ControllerBase
     {
         private IUserService _userService;

@@ -20,9 +20,9 @@ namespace LibMS.Services.Services
                 var userAssignedBook = await Repository.GetFilteredAsync(p =>
                                                             p.UserID == userId
                                                             && p.IsReturned == false);
-                if (userAssignedBook == null ||
+                if (userAssignedBook.Count() == 0 ||
                     (userAssignedBook.Count() < 2 &&
-                    userAssignedBook.Any(p => p.BookID != userId)))
+                    userAssignedBook.Any(p => p.BookID != currentBook.BookID)))
                 {
                     return (true, "Success");
                 }

@@ -22,7 +22,22 @@ namespace LibMS.Api.Controllers
             _bookCountService = bookCountService;
         }
 
-        
+        [HttpPost]
+        [Route("checkassigned")]
+        public async Task<bool> IfAssigned([FromBody] AssignBookInfo assignBook)
+        {
+            if (assignBook != null)
+            {
+                var assignedBook = await _assignBookService.GetFilteredAsync(p => p.BookID == assignBook.BookID
+                                                      && p.UserID == assignBook.UserID
+                                                      && p.IsReturned != true);
+                if (!assignedBook.Any())
+                {
+                    return false;
+                } 
+            }
+            return true;
+        }
 
         [HttpPost]
         public async Task<ResponseViewModel> PostAsync([FromBody] AssignBookInfo assignBook)
